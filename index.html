@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Timetable Scheduler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-section {
+            padding: 40px;
+            text-align: center;
+            display: block;
+        }
+
+        .dashboard {
+            padding: 30px;
+            display: none;
+        }
+
+        .role-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .role-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .timetable-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .timetable {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timetable th, .timetable td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .timetable th {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .timetable td {
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .timetable td:hover {
+            background: #f8f9fa;
+        }
+
+        .current-period {
+            background: #fff3cd !important;
+            border: 2px solid #ffc107;
+            font-weight: bold;
+        }
+
+        .subject-math { background-color: #e3f2fd; }
+        .subject-english { background-color: #f3e5f5; }
+        .subject-science { background-color: #e8f5e8; }
+        .subject-history { background-color: #fff8e1; }
+        .subject-art { background-color: #fce4ec; }
+
+        .notifications {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .notification-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-urgent {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .deadlines {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .deadline-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .deadline-urgent {
+            background: #fff5f5;
+            border: 1px solid #dc3545;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #6c757d;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .timetable {
+                font-size: 12px;
+            }
+
+            .timetable th, .timetable td {
+                padding: 8px 4px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+
+        .add-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Student Timetable Scheduler</h1>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="login-section">
+            <div class="role-selector">
+                <button class="role-btn active" data-role="student">Student</button>
+                <button class="role-btn" data-role="teacher">Teacher</button>
+                <button class="role-btn" data-role="parent">Parent</button>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username/Email</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group" id="childSelectGroup" style="display: none;">
+                    <label for="childSelect">Select Child</label>
+                    <select id="childSelect">
+                        <option value="john_doe">John Doe</option>
+                        <option value="jane_doe">Jane Doe</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <h2 id="welcomeMessage">Welcome!</h2>
+                    <span id="currentTime"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="timetable">Timetable</button>
+                <button class="tab" data-tab="notifications" id="notificationsTab">Notifications</button>
+                <button class="tab" data-tab="deadlines" id="deadlinesTab">Deadlines</button>
+                <button class="tab" data-tab="events" id="eventsTab" style="display: none;">Events</button>
+            </div>
+
+            <!-- Timetable Tab -->
+            <div class="tab-content active" id="timetableContent">
+                <div class="timetable-container">
+                    <h3>Weekly Timetable</h3>
+                    <table class="timetable" id="timetableTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div class="tab-content" id="notificationsContent">
+                <div class="notifications">
+                    <h3>Notifications</h3>
+                    <div id="notificationsList">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deadlines Tab -->
+            <div class="tab-content" id="deadlinesContent">
+                <div class="deadlines">
+                    <h3>Deadlines</h3>
+                    <div id="deadlinesList">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Tab -->
+            <div class="tab-content" id="eventsContent">
+                <div class="notifications">
+                    <h3>Special Events</h3>
+                    <div id="eventsList">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Button -->
+    <button class="add-btn" id="addBtn" style="display: none;" onclick="openAddModal()">+</button>
+
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddModal()">&times;</span>
+            <h2 id="modalTitle">Add Item</h2>
+            <form id="addForm">
+                <div class="form-group">
+                    <label for="itemTitle">Title</label>
+                    <input type="text" id="itemTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="itemDate">Date</label>
+                    <input type="date" id="itemDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemTime">Time</label>
+                    <input type="time" id="itemTime" required>
+                </div>
+                <div class="form-group" id="subjectGroup" style="display: none;">
+                    <label for="itemSubject">Subject</label>
+                    <select id="itemSubject">
+                        <option value="math">Mathematics</option>
+                        <option value="english">English</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="art">Art</option>
+                    </select>
+                </div>
+                <div class="form-group" id="dayGroup" style="display: none;">
+                    <label for="itemDay">Day</label>
+                    <select id="itemDay">
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday</option>
+                        <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentRole = 'student';
+        let addModalType = 'deadline';
+
+        // Sample data
+        const sampleTimetable = {
+            "09:00": {
+                monday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
+                tuesday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
+                wednesday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
+                thursday: { subject: "History", teacher: "Mr. Davis", room: "105" },
+                friday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" }
+            },
+            "10:00": {
+                monday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
+                tuesday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
+                wednesday: { subject: "History", teacher: "Mr. Davis", room: "105" },
+                thursday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
+                friday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" }
+            },
+            "11:00": {
+                monday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
+                tuesday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
+                wednesday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
+                thursday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
+                friday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" }
+            },
+            "14:00": {
+                monday: { subject: "History", teacher: "Mr. Davis", room: "105" },
+                tuesday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
+                wednesday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
+                thursday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
+                friday: { subject: "History", teacher: "Mr. Davis", room: "105" }
+            },
+            "15:00": {
+                monday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
+                tuesday: { subject: "History", teacher: "Mr. Davis", room: "105" },
+                wednesday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
+                thursday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
+                friday: { subject: "English", teacher: "Ms. Johnson", room: "203" }
+            }
+        };
+
+        let deadlines = [
+            { id: 1, title: "Math Assignment", description: "Complete exercises 1-20", date: "2025-09-05", time: "23:59", urgent: false },
+            { id: 2, title: "Science Project", description: "Solar system model", date: "2025-09-03", time: "10:00", urgent: true },
+            { id: 3, title: "English Essay", description: "500 words on climate change", date: "2025-09-08", time: "14:00", urgent: false }
+        ];
+
+        let notifications = [
+            { id: 1, title: "Period Reminder", message: "Mathematics class starts in 10 minutes", time: "09:50", urgent: true },
+            { id: 2, title: "Assignment Due", message: "Science project due tomorrow", time: "08:00", urgent: true },
+            { id: 3, title: "Schedule Change", message: "Art class moved to Room Art2", time: "Yesterday", urgent: false }
+        ];
+
+        let events = [
+            { id: 1, title: "School Science Fair", description: "Annual science exhibition", date: "2025-09-15", time: "09:00" },
+            { id: 2, title: "Parent-Teacher Meeting", description: "Quarterly progress review", date: "2025-09-20", time: "16:00" },
+            { id: 3, title: "Sports Day", description: "Annual sports competition", date: "2025-09-25", time: "08:00" }
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Role selector
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentRole = this.dataset.role;
+                    
+                    const childGroup = document.getElementById('childSelectGroup');
+                    if (currentRole === 'parent') {
+                        childGroup.style.display = 'block';
+                    } else {
+                        childGroup.style.display = 'none';
+                    }
+                });
+            });
+
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Add form
+            document.getElementById('addForm').addEventListener('submit', handleAddItem);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple validation (in real app, this would be server-side)
+            if (username && password) {
+                currentUser = {
+                    username: username,
+                    role: currentRole,
+                    child: currentRole === 'parent' ? document.getElementById('childSelect').value : null
+                };
+
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                setupDashboard();
+            }
+        }
+
+        function setupDashboard() {
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            const addBtn = document.getElementById('addBtn');
+            const tabsContainer = document.querySelector('.tabs');
+            
+            switch (currentUser.role) {
+                case 'student':
+                    welcomeMsg.textContent = `Welcome, ${currentUser.username}!`;
+                    addBtn.style.display = 'block';
+                    document.getElementById('deadlinesTab').style.display = 'block';
+                    document.getElementById('notificationsTab').style.display = 'block';
+                    break;
+                case 'teacher':
+                    welcomeMsg.textContent = `Welcome, Teacher ${currentUser.username}!`;
+                    addBtn.style.display = 'block';
+                    document.getElementById('eventsTab').style.display = 'block';
+                    document.getElementById('deadlinesTab').style.display = 'none';
+                    break;
+                case 'parent':
+                    welcomeMsg.textContent = `Welcome, ${currentUser.username}! (Viewing: ${currentUser.child})`;
+                    addBtn.style.display = 'none';
+                    document.getElementById('eventsTab').style.display = 'block';
+                    document.getElementById('deadlinesTab').style.display = 'none';
+                    document.getElementById('notificationsTab').style.display = 'none';
+                    break;
+            }
+
+            loadTimetable();
+            loadNotifications();
+            loadDeadlines();
+            loadEvents();
+            highlightCurrentPeriod();
+        }
+
+        function loadTimetable() {
+            const tbody = document.getElementById('timetableBody');
+            tbody.innerHTML = '';
+
+            const times = Object.keys(sampleTimetable);
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+            times.forEach(time => {
+                const row = document.createElement('tr');
+                
+                // Time column
+                const timeCell = document.createElement('td');
+                timeCell.innerHTML = `<strong>${time}</strong>`;
+                row.appendChild(timeCell);
+
+                // Day columns
+                days.forEach(day => {
+                    const cell = document.createElement('td');
+                    const period = sampleTimetable[time][day];
+                    
+                    if (period) {
+                        cell.innerHTML = `
+                            <div class="subject-${period.subject.toLowerCase()}" style="padding: 8px; border-radius: 4px;">
+                                <strong>${period.subject}</strong><br>
+                                <small>${period.teacher}</small><br>
+                                <small>Room: ${period.room}</small>
+                            </div>
+                        `;
+                        cell.classList.add(`subject-${period.subject.toLowerCase()}`);
+                        cell.dataset.time = time;
+                        cell.dataset.day = day;
+                    }
+                    
+                    row.appendChild(cell);
+                });
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadNotifications() {
+            const container = document.getElementById('notificationsList');
+            container.innerHTML = '';
+
+            notifications.forEach(notification => {
+                const item = document.createElement('div');
+                item.className = `notification-item ${notification.urgent ? 'notification-urgent' : ''}`;
+                item.innerHTML = `
+                    <h4>${notification.title}</h4>
+                    <p>${notification.message}</p>
+                    <small>Time: ${notification.time}</small>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function loadDeadlines() {
+            const container = document.getElementById('deadlinesList');
+            container.innerHTML = '';
+
+            deadlines.forEach(deadline => {
+                const item = document.createElement('div');
+                const isUrgent = new Date(deadline.date) <= new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
+                item.className = `deadline-item ${isUrgent ? 'deadline-urgent' : ''}`;
+                item.innerHTML = `
+                    <div>
+                        <h4>${deadline.title}</h4>
+                        <p>${deadline.description}</p>
+                        <small>Due: ${deadline.date} at ${deadline.time}</small>
+                    </div>
+                    <button onclick="removeDeadline(${deadline.id})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Done</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function loadEvents() {
+            const container = document.getElementById('eventsList');
+            container.innerHTML = '';
+
+            events.forEach(event => {
+                const item = document.createElement('div');
+                item.className = 'notification-item';
+                item.innerHTML = `
+                    <h4>${event.title}</h4>
+                    <p>${event.description}</p>
+                    <small>Date: ${event.date} at ${event.time}</small>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function highlightCurrentPeriod() {
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':00';
+            const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
+
+            document.querySelectorAll('.timetable td').forEach(cell => {
+                cell.classList.remove('current-period');
+                if (cell.dataset.time === currentTime && cell.dataset.day === currentDay) {
+                    cell.classList.add('current-period');
+                }
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}Content`).classList.add('active');
+        }
+
+        function openAddModal() {
+            const modal = document.getElementById('addModal');
+            const title = document.getElementById('modalTitle');
+            const subjectGroup = document.getElementById('subjectGroup');
+            const dayGroup = document.getElementById('dayGroup');
+
+            if (currentUser.role === 'teacher') {
+                title.textContent = 'Add Event/Class';
+                addModalType = 'event';
+                subjectGroup.style.display = 'block';
+                dayGroup.style.display = 'block';
+            } else {
+                title.textContent = 'Add Deadline';
+                addModalType = 'deadline';
+                subjectGroup.style.display = 'none';
+                dayGroup.style.display = 'none';
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+            document.getElementById('addForm').reset();
+        }
+
+        function handleAddItem(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('itemTitle').value;
+            const description = document.getElementById('itemDescription').value;
+            const date = document.getElementById('itemDate').value;
+            const time = document.getElementById('itemTime').value;
+
+            if (addModalType === 'deadline') {
+                const newId = deadlines.length + 1;
+                deadlines.push({
+                    id: newId,
+                    title: title,
+                    description: description,
+                    date: date,
+                    time: time,
+                    urgent: false
+                });
+                loadDeadlines();
+                showNotification('Deadline added successfully!');
+            } else if (addModalType === 'event') {
+                const newId = events.length + 1;
+                events.push({
+                    id: newId,
+                    title: title,
+                    description: description,
+                    date: date,
+                    time: time
+                });
+                loadEvents();
+                showNotification('Event added successfully!');
+            }
+
+            closeAddModal();
+        }
+
+        function removeDeadline(id) {
+            deadlines = deadlines.filter(deadline => deadline.id !== id);
+            loadDeadlines();
+            showNotification('Deadline marked as completed!');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px;
+                border-radius: 8px;
+                z-index: 1001;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString();
+            document.getElementById('currentTime').textContent = `${dateString} ${timeString}`;
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('addBtn').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            
+            // Reset tabs visibility
+            document.getElementById('eventsTab').style.display = 'none';
+            document.getElementById('deadlinesTab').style.display = 'block';
+            document.getElementById('notificationsTab').style.display = 'block';
+            
+            // Reset to first tab
+            switchTab('timetable');
+        }
+
+        // Periodic notifications for students
+        setInterval(() => {
+            if (currentUser && currentUser.role === 'student') {
+                const now = new Date();
+                const currentTime = now.getHours().toString().padStart(2, '0') + ':' + 
+                                 (now.getMinutes() - 10).toString().padStart(2, '0');
+                const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
+                
+                // Check if there's a class starting in 10 minutes
+                Object.keys(sampleTimetable).forEach(time => {
+                    if (time === currentTime) {
+                        const period = sampleTimetable[time][currentDay];
+                        if (period) {
+                            showNotification(`${period.subject} class starts in 10 minutes in room ${period.room}!`);
+                        }
+                    }
+                });
+            }
+        }, 60000); // Check every minute
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addModal');
+            if (event.target === modal) {
+                closeAddModal();
+            }
+        }
+    </script>
+</body>
+</html>
