@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
@@ -131,6 +131,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .logout-btn {
@@ -140,6 +141,11 @@
             padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
         }
 
         .timetable-container {
@@ -147,10 +153,38 @@
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .timetable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .edit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: #218838;
+        }
+
+        .timetable-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .timetable {
             width: 100%;
+            min-width: 700px;
             border-collapse: collapse;
             background: white;
             border-radius: 8px;
@@ -162,21 +196,38 @@
             padding: 12px;
             text-align: center;
             border: 1px solid #e9ecef;
+            position: relative;
         }
 
         .timetable th {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .timetable td {
             background: white;
             transition: all 0.3s ease;
+            min-height: 60px;
+            vertical-align: top;
         }
 
         .timetable td:hover {
             background: #f8f9fa;
+        }
+
+        .period-content {
+            padding: 8px;
+            border-radius: 4px;
+            min-height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .period-content:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .current-period {
@@ -190,6 +241,18 @@
         .subject-science { background-color: #e8f5e8; }
         .subject-history { background-color: #fff8e1; }
         .subject-art { background-color: #fce4ec; }
+        .subject-physical { background-color: #ffebee; }
+        .subject-computer { background-color: #e8eaf6; }
+        .subject-music { background-color: #fff3e0; }
+
+        .edit-mode .period-content {
+            border: 2px dashed #6c757d;
+        }
+
+        .edit-mode .period-content:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa !important;
+        }
 
         .notifications {
             background: #f8f9fa;
@@ -273,7 +336,8 @@
             display: flex;
             margin-bottom: 20px;
             border-bottom: 2px solid #e9ecef;
-            flex-wrap: wrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tab {
@@ -285,6 +349,8 @@
             color: #6c757d;
             border-bottom: 2px solid transparent;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .tab.active {
@@ -301,32 +367,131 @@
             display: block;
         }
 
+        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
             .container {
-                margin: 10px;
                 border-radius: 10px;
             }
 
-            .timetable {
-                font-size: 12px;
+            .header {
+                padding: 15px;
             }
 
-            .timetable th, .timetable td {
-                padding: 8px 4px;
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard {
+                padding: 15px;
             }
 
             .dashboard-header {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 10px;
+            }
+
+            .user-info {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .user-info h2 {
+                font-size: 1.2rem;
+            }
+
+            .timetable-container {
+                padding: 15px;
+            }
+
+            .timetable-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .timetable-header h3 {
+                text-align: center;
+            }
+
+            .timetable {
+                min-width: 750px;
+                font-size: 12px;
+            }
+
+            .timetable th, .timetable td {
+                padding: 6px 4px;
+            }
+
+            .period-content {
+                padding: 4px;
+                min-height: 40px;
             }
 
             .tabs {
-                flex-direction: column;
+                border-bottom: 1px solid #e9ecef;
+                gap: 5px;
             }
 
             .tab {
-                text-align: center;
-                border-bottom: 1px solid #e9ecef;
+                padding: 8px 12px;
+                font-size: 14px;
+                min-width: auto;
+            }
+
+            .login-section {
+                padding: 20px;
+            }
+
+            .role-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .role-btn {
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 20px;
+                width: 95%;
+            }
+
+            .deadline-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .add-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timetable {
+                min-width: 600px;
+                font-size: 11px;
+            }
+
+            .timetable th, .timetable td {
+                padding: 4px 2px;
+            }
+
+            .period-content {
+                padding: 2px;
+                min-height: 35px;
+                font-size: 10px;
             }
         }
 
@@ -344,11 +509,25 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
+            z-index: 100;
         }
 
         .add-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-period {
+            color: #6c757d;
+            font-style: italic;
+            background: #f8f9fa !important;
+        }
+
+        .time-column {
+            background: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+            min-width: 80px;
         }
     </style>
 </head>
@@ -407,21 +586,29 @@
             <!-- Timetable Tab -->
             <div class="tab-content active" id="timetableContent">
                 <div class="timetable-container">
-                    <h3>Weekly Timetable</h3>
-                    <table class="timetable" id="timetableTable">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Monday</th>
-                                <th>Tuesday</th>
-                                <th>Wednesday</th>
-                                <th>Thursday</th>
-                                <th>Friday</th>
-                            </tr>
-                        </thead>
-                        <tbody id="timetableBody">
-                        </tbody>
-                    </table>
+                    <div class="timetable-header">
+                        <h3>Weekly Timetable</h3>
+                        <button class="edit-btn" id="editTimetableBtn" style="display: none;" onclick="toggleEditMode()">
+                            Edit Timetable
+                        </button>
+                    </div>
+                    <div class="timetable-wrapper">
+                        <table class="timetable" id="timetableTable">
+                            <thead>
+                                <tr>
+                                    <th class="time-column">Time</th>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
+                                    <th>Saturday</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -487,6 +674,9 @@
                         <option value="science">Science</option>
                         <option value="history">History</option>
                         <option value="art">Art</option>
+                        <option value="physical">Physical Education</option>
+                        <option value="computer">Computer Science</option>
+                        <option value="music">Music</option>
                     </select>
                 </div>
                 <div class="form-group" id="dayGroup" style="display: none;">
@@ -496,10 +686,46 @@
                         <option value="tuesday">Tuesday</option>
                         <option value="wednesday">Wednesday</option>
                         <option value="thursday">Thursday</option>
-                        <option value="friday">Friday</option>
+                        <option value="saturday">Saturday</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-primary">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Period Modal -->
+    <div id="editPeriodModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditPeriodModal()">&times;</span>
+            <h2>Edit Period</h2>
+            <form id="editPeriodForm">
+                <div class="form-group">
+                    <label for="editSubject">Subject</label>
+                    <select id="editSubject" required>
+                        <option value="">-- Select Subject --</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="english">English</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="art">Art</option>
+                        <option value="physical education">Physical Education</option>
+                        <option value="computer science">Computer Science</option>
+                        <option value="music">Music</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editTeacher">Teacher</label>
+                    <input type="text" id="editTeacher" required>
+                </div>
+                <div class="form-group">
+                    <label for="editRoom">Room</label>
+                    <input type="text" id="editRoom" required>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" onclick="clearPeriod()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Clear</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
             </form>
         </div>
     </div>
@@ -509,43 +735,50 @@
         let currentUser = null;
         let currentRole = 'student';
         let addModalType = 'deadline';
+        let isEditMode = false;
+        let editingPeriod = null;
 
-        // Sample data
-        const sampleTimetable = {
+        // Sample data - made mutable for editing
+        let timetableData = {
             "09:00": {
                 monday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
                 tuesday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
                 wednesday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
                 thursday: { subject: "History", teacher: "Mr. Davis", room: "105" },
-                friday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" }
+                friday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
+                saturday: { subject: "Physical Education", teacher: "Coach Miller", room: "Gym" }
             },
             "10:00": {
                 monday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
                 tuesday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
                 wednesday: { subject: "History", teacher: "Mr. Davis", room: "105" },
                 thursday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
-                friday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" }
+                friday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
+                saturday: { subject: "Computer Science", teacher: "Mr. Tech", room: "Lab2" }
             },
             "11:00": {
                 monday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
                 tuesday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
                 wednesday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
                 thursday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
-                friday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" }
+                friday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
+                saturday: { subject: "Music", teacher: "Ms. Melody", room: "Music1" }
             },
             "14:00": {
                 monday: { subject: "History", teacher: "Mr. Davis", room: "105" },
                 tuesday: { subject: "Science", teacher: "Dr. Brown", room: "Lab1" },
                 wednesday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
                 thursday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
-                friday: { subject: "History", teacher: "Mr. Davis", room: "105" }
+                friday: { subject: "History", teacher: "Mr. Davis", room: "105" },
+                saturday: null // Free period on Saturday afternoon
             },
             "15:00": {
                 monday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
                 tuesday: { subject: "History", teacher: "Mr. Davis", room: "105" },
                 wednesday: { subject: "Art", teacher: "Ms. Wilson", room: "Art1" },
                 thursday: { subject: "Mathematics", teacher: "Mr. Smith", room: "101" },
-                friday: { subject: "English", teacher: "Ms. Johnson", room: "203" }
+                friday: { subject: "English", teacher: "Ms. Johnson", room: "203" },
+                saturday: null // Free period on Saturday afternoon
             }
         };
 
@@ -603,6 +836,9 @@
 
             // Add form
             document.getElementById('addForm').addEventListener('submit', handleAddItem);
+
+            // Edit period form
+            document.getElementById('editPeriodForm').addEventListener('submit', handleEditPeriod);
         }
 
         function handleLogin(e) {
@@ -628,24 +864,27 @@
         function setupDashboard() {
             const welcomeMsg = document.getElementById('welcomeMessage');
             const addBtn = document.getElementById('addBtn');
-            const tabsContainer = document.querySelector('.tabs');
+            const editBtn = document.getElementById('editTimetableBtn');
             
             switch (currentUser.role) {
                 case 'student':
                     welcomeMsg.textContent = `Welcome, ${currentUser.username}!`;
                     addBtn.style.display = 'block';
+                    editBtn.style.display = 'none';
                     document.getElementById('deadlinesTab').style.display = 'block';
                     document.getElementById('notificationsTab').style.display = 'block';
                     break;
                 case 'teacher':
                     welcomeMsg.textContent = `Welcome, Teacher ${currentUser.username}!`;
                     addBtn.style.display = 'block';
+                    editBtn.style.display = 'block';
                     document.getElementById('eventsTab').style.display = 'block';
                     document.getElementById('deadlinesTab').style.display = 'none';
                     break;
                 case 'parent':
                     welcomeMsg.textContent = `Welcome, ${currentUser.username}! (Viewing: ${currentUser.child})`;
                     addBtn.style.display = 'none';
+                    editBtn.style.display = 'none';
                     document.getElementById('eventsTab').style.display = 'block';
                     document.getElementById('deadlinesTab').style.display = 'none';
                     document.getElementById('notificationsTab').style.display = 'none';
@@ -661,33 +900,57 @@
 
         function loadTimetable() {
             const tbody = document.getElementById('timetableBody');
+            const table = document.getElementById('timetableTable');
             tbody.innerHTML = '';
 
-            const times = Object.keys(sampleTimetable);
-            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            // Remove edit mode class
+            table.classList.remove('edit-mode');
+
+            const times = Object.keys(timetableData);
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
             times.forEach(time => {
                 const row = document.createElement('tr');
                 
                 // Time column
                 const timeCell = document.createElement('td');
+                timeCell.className = 'time-column';
                 timeCell.innerHTML = `<strong>${time}</strong>`;
                 row.appendChild(timeCell);
 
                 // Day columns
                 days.forEach(day => {
                     const cell = document.createElement('td');
-                    const period = sampleTimetable[time][day];
+                    const period = timetableData[time][day];
                     
                     if (period) {
-                        cell.innerHTML = `
-                            <div class="subject-${period.subject.toLowerCase()}" style="padding: 8px; border-radius: 4px;">
-                                <strong>${period.subject}</strong><br>
-                                <small>${period.teacher}</small><br>
-                                <small>Room: ${period.room}</small>
-                            </div>
+                        const periodDiv = document.createElement('div');
+                        periodDiv.className = `period-content subject-${period.subject.toLowerCase()}`;
+                        periodDiv.innerHTML = `
+                            <strong>${period.subject}</strong><br>
+                            <small>${period.teacher}</small><br>
+                            <small>Room: ${period.room}</small>
                         `;
-                        cell.classList.add(`subject-${period.subject.toLowerCase()}`);
+                        
+                        // Add click handler for editing (teachers only)
+                        if (currentUser && currentUser.role === 'teacher') {
+                            periodDiv.onclick = () => openEditPeriodModal(time, day, period);
+                        }
+                        
+                        cell.appendChild(periodDiv);
+                        cell.dataset.time = time;
+                        cell.dataset.day = day;
+                    } else {
+                        // Empty period
+                        const periodDiv = document.createElement('div');
+                        periodDiv.className = 'period-content empty-period';
+                        periodDiv.innerHTML = '<em>Free Period</em>';
+                        
+                        if (currentUser && currentUser.role === 'teacher') {
+                            periodDiv.onclick = () => openEditPeriodModal(time, day, null);
+                        }
+                        
+                        cell.appendChild(periodDiv);
                         cell.dataset.time = time;
                         cell.dataset.day = day;
                     }
@@ -699,9 +962,107 @@
             });
         }
 
+        function toggleEditMode() {
+            const table = document.getElementById('timetableTable');
+            const editBtn = document.getElementById('editTimetableBtn');
+            
+            isEditMode = !isEditMode;
+            
+            if (isEditMode) {
+                table.classList.add('edit-mode');
+                editBtn.textContent = 'Exit Edit Mode';
+                editBtn.style.background = '#dc3545';
+                showNotification('Click on any period to edit it!');
+            } else {
+                table.classList.remove('edit-mode');
+                editBtn.textContent = 'Edit Timetable';
+                editBtn.style.background = '#28a745';
+            }
+        }
+
+        function openEditPeriodModal(time, day, period) {
+            if (currentUser.role !== 'teacher') return;
+            
+            editingPeriod = { time, day };
+            
+            const modal = document.getElementById('editPeriodModal');
+            const subjectSelect = document.getElementById('editSubject');
+            const teacherInput = document.getElementById('editTeacher');
+            const roomInput = document.getElementById('editRoom');
+            
+            // Populate form with existing data if period exists
+            if (period) {
+                subjectSelect.value = period.subject.toLowerCase();
+                teacherInput.value = period.teacher;
+                roomInput.value = period.room;
+            } else {
+                subjectSelect.value = '';
+                teacherInput.value = '';
+                roomInput.value = '';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeEditPeriodModal() {
+            document.getElementById('editPeriodModal').style.display = 'none';
+            document.getElementById('editPeriodForm').reset();
+            editingPeriod = null;
+        }
+
+        function handleEditPeriod(e) {
+            e.preventDefault();
+            
+            if (!editingPeriod) return;
+            
+            const subject = document.getElementById('editSubject').value;
+            const teacher = document.getElementById('editTeacher').value;
+            const room = document.getElementById('editRoom').value;
+            
+            const { time, day } = editingPeriod;
+            
+            // Ensure the time slot exists in timetableData
+            if (!timetableData[time]) {
+                timetableData[time] = {};
+            }
+            
+            // Update the period
+            timetableData[time][day] = {
+                subject: subject.charAt(0).toUpperCase() + subject.slice(1),
+                teacher: teacher,
+                room: room
+            };
+            
+            // Reload timetable
+            loadTimetable();
+            closeEditPeriodModal();
+            showNotification('Period updated successfully!');
+        }
+
+        function clearPeriod() {
+            if (!editingPeriod) return;
+            
+            const { time, day } = editingPeriod;
+            
+            // Remove the period
+            if (timetableData[time] && timetableData[time][day]) {
+                delete timetableData[time][day];
+            }
+            
+            // Reload timetable
+            loadTimetable();
+            closeEditPeriodModal();
+            showNotification('Period cleared successfully!');
+        }
+
         function loadNotifications() {
             const container = document.getElementById('notificationsList');
             container.innerHTML = '';
+
+            if (notifications.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d;">No notifications</p>';
+                return;
+            }
 
             notifications.forEach(notification => {
                 const item = document.createElement('div');
@@ -718,6 +1079,11 @@
         function loadDeadlines() {
             const container = document.getElementById('deadlinesList');
             container.innerHTML = '';
+
+            if (deadlines.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d;">No deadlines</p>';
+                return;
+            }
 
             deadlines.forEach(deadline => {
                 const item = document.createElement('div');
@@ -739,6 +1105,11 @@
             const container = document.getElementById('eventsList');
             container.innerHTML = '';
 
+            if (events.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d;">No events</p>';
+                return;
+            }
+
             events.forEach(event => {
                 const item = document.createElement('div');
                 item.className = 'notification-item';
@@ -757,9 +1128,11 @@
             const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
 
             document.querySelectorAll('.timetable td').forEach(cell => {
-                cell.classList.remove('current-period');
-                if (cell.dataset.time === currentTime && cell.dataset.day === currentDay) {
-                    cell.classList.add('current-period');
+                if (cell.firstChild && cell.firstChild.classList) {
+                    cell.firstChild.classList.remove('current-period');
+                    if (cell.dataset.time === currentTime && cell.dataset.day === currentDay) {
+                        cell.firstChild.classList.add('current-period');
+                    }
                 }
             });
         }
@@ -807,7 +1180,7 @@
             const time = document.getElementById('itemTime').value;
 
             if (addModalType === 'deadline') {
-                const newId = deadlines.length + 1;
+                const newId = deadlines.length > 0 ? Math.max(...deadlines.map(d => d.id)) + 1 : 1;
                 deadlines.push({
                     id: newId,
                     title: title,
@@ -819,7 +1192,7 @@
                 loadDeadlines();
                 showNotification('Deadline added successfully!');
             } else if (addModalType === 'event') {
-                const newId = events.length + 1;
+                const newId = events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1;
                 events.push({
                     id: newId,
                     title: title,
@@ -852,6 +1225,8 @@
                 border-radius: 8px;
                 z-index: 1001;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                max-width: 300px;
+                word-wrap: break-word;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -865,11 +1240,15 @@
             const now = new Date();
             const timeString = now.toLocaleTimeString();
             const dateString = now.toLocaleDateString();
-            document.getElementById('currentTime').textContent = `${dateString} ${timeString}`;
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = `${dateString} ${timeString}`;
+            }
         }
 
         function logout() {
             currentUser = null;
+            isEditMode = false;
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('addBtn').style.display = 'none';
@@ -889,13 +1268,13 @@
             if (currentUser && currentUser.role === 'student') {
                 const now = new Date();
                 const currentTime = now.getHours().toString().padStart(2, '0') + ':' + 
-                                 (now.getMinutes() - 10).toString().padStart(2, '0');
+                                 Math.max(0, now.getMinutes() - 10).toString().padStart(2, '0');
                 const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
                 
                 // Check if there's a class starting in 10 minutes
-                Object.keys(sampleTimetable).forEach(time => {
-                    if (time === currentTime) {
-                        const period = sampleTimetable[time][currentDay];
+                Object.keys(timetableData).forEach(time => {
+                    if (time === currentTime.split(':')[0] + ':00') {
+                        const period = timetableData[time][currentDay];
                         if (period) {
                             showNotification(`${period.subject} class starts in 10 minutes in room ${period.room}!`);
                         }
@@ -904,13 +1283,43 @@
             }
         }, 60000); // Check every minute
 
-        // Close modal when clicking outside
+        // Update current period highlighting every minute
+        setInterval(highlightCurrentPeriod, 60000);
+
+        // Close modals when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('addModal');
-            if (event.target === modal) {
+            const addModal = document.getElementById('addModal');
+            const editModal = document.getElementById('editPeriodModal');
+            
+            if (event.target === addModal) {
                 closeAddModal();
             }
+            if (event.target === editModal) {
+                closeEditPeriodModal();
+            }
         }
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // ESC key closes modals
+            if (e.key === 'Escape') {
+                closeAddModal();
+                closeEditPeriodModal();
+            }
+        });
+
+        // Touch event handling for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            // Add any swipe gestures if needed
+        });
     </script>
 </body>
 </html>
